@@ -55,6 +55,19 @@ pipeline{
             }   
                 
         }
+        stage("Publish over ssh"){
+            tools {
+                maven 'Maven'
+            }
+            steps{ 
+                script{
+                    sshPublisher(publishers: [sshPublisherDesc(configName: 'Ansible', transfers: 
+                    [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd /opt/docker
+                    mkdir $JOB_NAME:v1.$BUILD_ID''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '//opt//docker', remoteDirectorySDF: false, removePrefix: 'webapp/target', sourceFiles: 'webapp/target/*.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+
+                }
+            }                   
+        }
 
         
     }
