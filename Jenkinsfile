@@ -3,7 +3,7 @@ pipeline{
     stages{
         stage("Github automation"){
             steps{
-                git branch: 'main', url: 'https://github.com/mdsdsardar/hello-world.git'
+                git branch: 'master', url: 'https://github.com/mdsdsardar/hello-world.git'
             }
         }
         stage("Maven Build"){
