@@ -41,7 +41,7 @@ pipeline{
                     [
                         [
                             artifactId: 'maven-project', classifier: '', 
-                            file: "target/Maven Project-${readPomVersion.version}.war", type: 'war'
+                            file: "target/Webapp-${readPomVersion.version}.war", type: 'war'
                             ]
                     ],
                     credentialsId: 'nexus3', 
