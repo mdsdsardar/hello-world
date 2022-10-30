@@ -63,7 +63,21 @@ pipeline{
                 script{
                     sshPublisher(publishers: [sshPublisherDesc(configName: 'Ansible', transfers: 
                     [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd /opt/docker
-                    mkdir $JOB_NAME:v1.$BUILD_ID''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '//opt//docker', remoteDirectorySDF: false, removePrefix: 'webapp/target', sourceFiles: 'webapp/target/*.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                    mkdir $JOB_NAME:v1.$BUILD_ID''', execTimeout: 120000, 
+                    flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, 
+                    patternSeparator: '[, ]+', remoteDirectory: '//opt//docker', remoteDirectorySDF: false, 
+                    removePrefix: 'webapp/target', sourceFiles: 'webapp/target/*.war')], usePromotionTimestamp: false, 
+                    useWorkspaceInPromotion: false, verbose: false), sshPublisherDesc(configName: 'Ansible', transfers: 
+                    [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd /opt/docker
+                    docker build -t $JOB_NAME:v1.$BUILD_ID .
+                    docker tag $JOB_NAME:v1.$BUILD_ID mdsdsardar/$JOB_NAME:v1.$BUILD_ID
+                    docker tag $JOB_NAME:v1.$BUILD_ID mdsdsardar/$JOB_NAME:latest
+                    docker push mdsdsardar/$JOB_NAME:v1.$BUILD_ID
+                    docker push mdsdsardar/$JOB_NAME:latest
+                    docker rmi $JOB_NAME:v1.$BUILD_ID mdsdsardar/$JOB_NAME:v1.$BUILD_ID mdsdsardar/$JOB_NAME:latest''', 
+                    execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, 
+                    patternSeparator: '[, ]+', remoteDirectory: '//opt//docker', remoteDirectorySDF: false, removePrefix: '', 
+                    sourceFiles: 'Dockerfile')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
 
                 }
             }                   
