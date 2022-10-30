@@ -35,13 +35,13 @@ pipeline{
                 script{
                     
 
-                    // def readPomVersion = readMavenPom file: 'pom.xml'
-                    // def nexusRepo =  readPomVersion.version.endsWith("SNAPSHOT") ? "maven-snapshots" : "maven-release"
+                    def readPomVersion = readMavenPom file: 'pom.xml'
+                    def nexusRepo =  readPomVersion.version.endsWith("SNAPSHOT") ? "maven-snapshots" : "maven-release"
                     nexusArtifactUploader artifacts: 
                     [
                         [
                             artifactId: 'maven-project', classifier: '', 
-                            file: "webapp/target/webapp.war", type: 'war'
+                            file: "webapp/target/webapp-${readPomVersion.version}.war", type: 'war'
                             ]
                     ],
                     credentialsId: 'nexus3', 
@@ -49,8 +49,8 @@ pipeline{
                     nexusUrl: '13.127.173.152:8081', 
                     nexusVersion: 'nexus3', 
                     protocol: 'http', 
-                    repository: 'maven-snapshots', 
-                    version: '1.0-SNAPSHOT'     
+                    repository: nexusRepo, 
+                    version: "${readPomVersion.version}"     
                 }               
             }   
                 
