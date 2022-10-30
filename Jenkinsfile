@@ -1,22 +1,35 @@
 pipeline{
     agent any
     stages{
-        stage("A"){
+        stage("Github automation"){
             steps{
-                echo "========executing A========"
-            }
-            post{
-                always{
-                    echo "========always========"
-                }
-                success{
-                    echo "========A executed successfully========"
-                }
-                failure{
-                    echo "========A execution failed========"
-                }
+                git branch: 'main', url: 'https://github.com/mdsdsardar/hello-world.git'
             }
         }
+        stage("Maven Build"){
+            tools {
+                maven 'Maven' 
+            }
+            steps{    
+                sh 'mvn clean install package'
+            }
+        }
+        stage("SonarQube analysis"){
+            tools {
+                maven 'Maven'
+            }
+            steps{ 
+                script{                    
+                    withSonarQubeEnv(credentialsId: 'saadissad') {
+                        sh 'mvn clean package sonar:sonar'
+
+                    }
+                        
+                }   
+                
+            }
+        }
+        
     }
     post{
         always{
