@@ -74,7 +74,9 @@ pipeline{
                     docker tag $JOB_NAME:v1.$BUILD_ID mdsdsardar/$JOB_NAME:latest
                     docker push mdsdsardar/$JOB_NAME:v1.$BUILD_ID
                     docker push mdsdsardar/$JOB_NAME:latest
-                    docker rmi $JOB_NAME:v1.$BUILD_ID mdsdsardar/$JOB_NAME:v1.$BUILD_ID mdsdsardar/$JOB_NAME:latest''', 
+                    docker rmi $JOB_NAME:v1.$BUILD_ID mdsdsardar/$JOB_NAME:v1.$BUILD_ID mdsdsardar/$JOB_NAME:latest
+                    cd /opt/playbooks
+                    ansible-playbook create_docker_container.yml''', 
                     execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, 
                     patternSeparator: '[, ]+', remoteDirectory: '//opt//docker', remoteDirectorySDF: false, removePrefix: '', 
                     sourceFiles: 'Dockerfile')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
