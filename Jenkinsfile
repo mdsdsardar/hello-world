@@ -29,6 +29,33 @@ pipeline{
                 
             }
         }
+        stage("Upload war file to nexus"){
+            steps{
+             
+                script{
+                    
+
+                    def readPomVersion = readMavenPom file: 'pom.xml'
+                    def nexusRepo =  readPomVersion.version.endsWith("SNAPSHOT") ? "maven-snapshots" : "maven-release"
+                    nexusArtifactUploader artifacts: 
+                    [
+                        [
+                            artifactId: 'maven-project', classifier: '', 
+                            file: "target/maven-project-${readPomVersion.version}.war", type: 'war'
+                            ]
+                    ],
+                    credentialsId: 'nexus3', 
+                    groupId: 'com.example.maven-project', 
+                    nexusUrl: '13.127.173.152:8081', 
+                    nexusVersion: 'nexus3', 
+                    protocol: 'http', 
+                    repository: nexusRepo, 
+                    version: "${readPomVersion.version}"     
+                }               
+            }   
+                
+        }
+
         
     }
     post{
