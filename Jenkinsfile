@@ -41,7 +41,7 @@ pipeline{
                     [
                         [
                             artifactId: 'maven-project', classifier: '', 
-                            file: "target/Maven Project.war", type: 'war'
+                            file: "webapp/target/webapp.war", type: 'war'
                             ]
                     ],
                     credentialsId: 'nexus3', 
